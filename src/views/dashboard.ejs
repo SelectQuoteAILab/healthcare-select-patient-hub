@@ -1,0 +1,106 @@
+<div class="dashboard">
+  <div class="dashboard-header">
+    <h1>Welcome back, <%= user.name || 'Patient' %></h1>
+    <p class="last-sync">Last data sync: <%= user.lastSync ? new Date(user.lastSync).toLocaleDateString() : 'Never' %></p>
+    <a href="/bluebutton/sync" class="btn btn-secondary"><i class="fas fa-sync"></i> Sync Medicare Data</a>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon"><i class="fas fa-pills"></i></div>
+      <div class="stat-value" id="med-count">--</div>
+      <div class="stat-label">Active Medications</div>
+      <a href="/medications" class="stat-link">View All</a>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon"><i class="fas fa-file-medical"></i></div>
+      <div class="stat-value" id="claim-count">--</div>
+      <div class="stat-label">Claims on File</div>
+      <a href="/claims" class="stat-link">View All</a>
+    </div>
+    <div class="stat-card alert-card">
+      <div class="stat-icon"><i class="fas fa-exclamation-triangle"></i></div>
+      <div class="stat-value" id="gap-count">--</div>
+      <div class="stat-label">Open Care Gaps</div>
+      <a href="/care-gaps" class="stat-link">Address Now</a>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
+      <div class="stat-value" id="spend-total">--</div>
+      <div class="stat-label">Total Healthcare Spend</div>
+    </div>
+  </div>
+
+  <div class="dashboard-sections">
+    <div class="section-card">
+      <h2><i class="fas fa-lightbulb"></i> Personalized Recommendations</h2>
+      <div id="recommendations-list" class="recommendations">
+        <p class="loading">Loading your personalized insights...</p>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h2><i class="fas fa-concierge-bell"></i> Available Services</h2>
+      <div class="services-grid">
+        <div class="mini-service">
+          <i class="fas fa-video"></i>
+          <div>
+            <h4>Virtual Care</h4>
+            <p>Schedule a visit with our 50-state licensed practice</p>
+          </div>
+          <a href="#" class="btn btn-sm">Schedule</a>
+        </div>
+        <div class="mini-service">
+          <i class="fas fa-prescription-bottle-alt"></i>
+          <div>
+            <h4>SelectRx Pharmacy</h4>
+            <p>Medication sync, MTM, and cost optimization</p>
+          </div>
+          <a href="#" class="btn btn-sm">Connect</a>
+        </div>
+        <div class="mini-service">
+          <i class="fas fa-heartbeat"></i>
+          <div>
+            <h4>CCM Program</h4>
+            <p>RPM and RTM chronic care monitoring</p>
+          </div>
+          <a href="#" class="btn btn-sm">Enroll</a>
+        </div>
+        <div class="mini-service">
+          <i class="fas fa-clipboard-check"></i>
+          <div>
+            <h4>Health Survey</h4>
+            <p>Complete your profile for better recommendations</p>
+          </div>
+          <a href="/survey" class="btn btn-sm">Take Survey</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+fetch('/insights/health-story')
+  .then(r => r.json())
+  .then(data => {
+    document.getElementById('med-count').textContent = data.summary.medicationCount || 0;
+    document.getElementById('claim-count').textContent = data.summary.claimCount || 0;
+    document.getElementById('gap-count').textContent = data.summary.openCareGaps || 0;
+    document.getElementById('spend-total').textContent = '$' + (data.summary.totalSpend || 0).toLocaleString();
+  }).catch(() => {});
+
+fetch('/insights/recommendations')
+  .then(r => r.json())
+  .then(recs => {
+    const el = document.getElementById('recommendations-list');
+    if (!recs.length) { el.innerHTML = '<p>Complete your health survey and sync Medicare data to get personalized recommendations.</p>'; return; }
+    el.innerHTML = recs.map(r => `
+      <div class="rec-card rec-${r.priority}">
+        <div class="rec-badge">${r.priority}</div>
+        <h4>${r.title}</h4>
+        <p>${r.description}</p>
+        <button class="btn btn-sm">${r.action}</button>
+      </div>
+    `).join('');
+  }).catch(() => {});
+</script>
