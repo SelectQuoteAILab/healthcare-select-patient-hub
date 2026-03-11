@@ -1,0 +1,42 @@
+<div class="page-header">
+  <h1><i class="fas fa-file-medical"></i> Claims History</h1>
+  <p>Your Medicare Explanation of Benefits from Blue Button 2.0</p>
+</div>
+
+<% if (typeof claims !== 'undefined' && claims.length > 0) { %>
+  <div class="claims-summary">
+    <div class="summary-stat"><strong><%= claims.length %></strong> claims</div>
+    <div class="summary-stat"><strong>$<%= totalSpend %></strong> total</div>
+  </div>
+  <div class="claims-table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Type</th>
+          <th>Provider</th>
+          <th>Diagnosis</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% claims.forEach(claim => { %>
+          <tr>
+            <td><%= claim.date || 'N/A' %></td>
+            <td><span class="type-badge"><%= claim.type || 'EOB' %></span></td>
+            <td><%= claim.provider || 'Unknown' %></td>
+            <td><%= claim.diagnosis || 'N/A' %></td>
+            <td class="amount">$<%= claim.amount ? claim.amount.toFixed(2) : '0.00' %></td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+<% } else { %>
+  <div class="empty-state">
+    <i class="fas fa-file-medical"></i>
+    <h2>No Claims Found</h2>
+    <p>Sync your Medicare data to see your claims history.</p>
+    <a href="/bluebutton/sync" class="btn btn-primary">Sync Medicare Data</a>
+  </div>
+<% } %>
