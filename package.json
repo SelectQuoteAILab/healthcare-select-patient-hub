@@ -1,0 +1,31 @@
+{
+  "name": "healthcare-select-patient-hub",
+  "version": "1.0.0",
+  "description": "Healthcare Select Patient Hub - Blue Button 2.0 powered health OS for Medicare beneficiaries",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "express-rate-limit": "^7.1.5",
+    "helmet": "^7.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "axios": "^1.6.5",
+    "ejs": "^3.1.9",
+    "uuid": "^9.0.0",
+    "winston": "^3.11.0",
+    "connect-sqlite3": "^0.9.15",
+    "better-sqlite3": "^9.4.3",
+    "crypto-js": "^4.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
