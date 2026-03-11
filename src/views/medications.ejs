@@ -1,0 +1,46 @@
+<div class="page-header">
+  <h1><i class="fas fa-pills"></i> Your Medications</h1>
+  <p>Medications from your Medicare claims and pharmacy records</p>
+</div>
+
+<% if (typeof medications !== 'undefined' && medications.length > 0) { %>
+  <div class="med-summary">
+    <span class="badge"><%= medications.length %> medications on file</span>
+    <a href="#" class="btn btn-secondary btn-sm"><i class="fas fa-prescription-bottle-alt"></i> Connect with SelectRx</a>
+  </div>
+
+  <div class="med-grid">
+    <% medications.forEach(med => { %>
+      <div class="med-card <%= med.adherence_score < 80 ? 'med-alert' : '' %>">
+        <div class="med-header">
+          <h3><%= med.drug_name %></h3>
+          <% if (med.adherence_score !== null) { %>
+            <div class="adherence-badge <%= med.adherence_score >= 80 ? 'good' : 'low' %>">
+              <%= med.adherence_score %>% adherence
+            </div>
+          <% } %>
+        </div>
+        <div class="med-details">
+          <p><strong>Dosage:</strong> <%= med.dosage || 'Not specified' %></p>
+          <p><strong>Prescriber:</strong> <%= med.prescriber || 'Unknown' %></p>
+          <p><strong>Last Filled:</strong> <%= med.fill_date ? new Date(med.fill_date).toLocaleDateString() : 'N/A' %></p>
+          <p><strong>Days Supply:</strong> <%= med.days_supply || 'N/A' %></p>
+          <p><strong>NDC:</strong> <%= med.ndc_code || 'N/A' %></p>
+        </div>
+        <% if (med.adherence_score !== null && med.adherence_score < 80) { %>
+          <div class="med-alert-msg">
+            <i class="fas fa-exclamation-circle"></i>
+            Low adherence detected. SelectRx can help with medication synchronization.
+          </div>
+        <% } %>
+      </div>
+    <% }); %>
+  </div>
+<% } else { %>
+  <div class="empty-state">
+    <i class="fas fa-pills"></i>
+    <h2>No Medications Found</h2>
+    <p>Sync your Medicare data to see your medication history.</p>
+    <a href="/bluebutton/sync" class="btn btn-primary">Sync Medicare Data</a>
+  </div>
+<% } %>
