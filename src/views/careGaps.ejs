@@ -1,26 +1,9 @@
+<%- include('partials/head') %>
+<%- include('partials/nav') %>
+<main class="flex-1">
 <div class="max-w-7xl mx-auto px-4 py-8">
-  <div class="flex justify-between items-center mb-8">
-    <div><h1 class="text-3xl font-serif font-bold">Care Gaps</h1><p class="text-gray-600 mt-1">Preventive care recommendations</p></div>
-    <a href="/dashboard" class="btn-secondary text-sm">Back to Dashboard</a>
-  </div>
-  <% if (typeof careGaps !== 'undefined' && careGaps && careGaps.length > 0) { %>
-    <div class="space-y-4">
-      <% careGaps.forEach(function(gap) { %>
-        <div class="card border-l-4 <%= gap.priority === 'high' ? 'border-l-red' : 'border-l-yellow-400' %>">
-          <div class="flex justify-between items-center">
-            <div>
-              <h3 class="font-semibold text-navy"><%= gap.measure || 'Care Gap' %></h3>
-              <p class="text-sm text-gray-500 mt-1"><%= gap.description || '' %></p>
-            </div>
-            <span class="px-3 py-1 text-xs rounded-full font-medium <%= gap.priority === 'high' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700' %>"><%= gap.priority || 'medium' %></span>
-          </div>
-        </div>
-      <% }); %>
-    </div>
-  <% } else { %>
-    <div class="card text-center py-12">
-      <svg class="w-16 h-16 text-green-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-      <p class="text-gray-500">No care gaps identified. You are up to date on preventive care.</p>
-    </div>
-  <% } %>
+  <div class="flex justify-between items-center mb-8"><div><h1 class="text-3xl font-serif font-bold" style="color:#1B3D6E">Care Gaps</h1><p class="text-gray-600 mt-1">Preventive care recommendations</p></div><a href="/dashboard" class="px-4 py-2 rounded-lg text-sm font-semibold text-white" style="background:#1B3D6E">Back to Dashboard</a></div>
+  <% if (typeof careGaps !== 'undefined' && careGaps && careGaps.length > 0) { %><div class="space-y-4"><% careGaps.forEach(function(gap) { %><div class="bg-white rounded-xl shadow-sm border-l-4 border border-gray-200 p-6" style="border-left-color:#C8102E"><h3 class="font-semibold" style="color:#1B3D6E"><%= gap.measure || 'Care Gap' %></h3><p class="text-sm text-gray-500 mt-1"><%= gap.description || '' %></p></div><% }); %></div><% } else { %><div class="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center"><svg class="w-16 h-16 text-green-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><p class="text-gray-500">No care gaps identified.</p></div><% } %>
 </div>
+</main>
+<%- include('partials/footer') %>

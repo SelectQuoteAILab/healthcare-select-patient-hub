@@ -1,11 +1,13 @@
+<%- include('partials/head') %>
+<%- include('partials/nav') %>
+<main class="flex-1">
 <div class="max-w-3xl mx-auto px-4 py-8">
-  <h1 class="text-3xl font-serif font-bold mb-6">Privacy Policy</h1>
-  <div class="card prose prose-sm max-w-none">
-    <h2 class="text-xl font-serif font-bold text-navy mt-6 mb-3">Information We Collect</h2>
-    <p class="text-gray-600 mb-4">We collect Medicare claims data through CMS Blue Button 2.0 API with your explicit authorization. This includes claims history, medication records, and coverage information.</p>
-    <h2 class="text-xl font-serif font-bold text-navy mt-6 mb-3">Data Security</h2>
-    <p class="text-gray-600 mb-4">All data is encrypted using AES-256 encryption at rest and TLS 1.2+ in transit. We maintain full HIPAA compliance.</p>
-    <h2 class="text-xl font-serif font-bold text-navy mt-6 mb-3">Your Rights</h2>
-    <p class="text-gray-600 mb-4">You may request deletion of your data at any time. You may also revoke Blue Button 2.0 access through Medicare.gov.</p>
+  <h1 class="text-3xl font-serif font-bold mb-6" style="color:#1B3D6E">Privacy Policy</h1>
+  <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+    <h2 class="text-xl font-serif font-bold mt-6 mb-3" style="color:#1B3D6E">Information We Collect</h2><p class="text-gray-600 mb-4 text-sm">We collect Medicare claims data through CMS Blue Button 2.0 API with your explicit authorization.</p>
+    <h2 class="text-xl font-serif font-bold mt-6 mb-3" style="color:#1B3D6E">Data Security</h2><p class="text-gray-600 mb-4 text-sm">All data is encrypted using AES-256 at rest and TLS 1.2+ in transit. We maintain full HIPAA compliance.</p>
+    <h2 class="text-xl font-serif font-bold mt-6 mb-3" style="color:#1B3D6E">Your Rights</h2><p class="text-gray-600 mb-4 text-sm">You may request deletion of your data at any time.</p>
   </div>
 </div>
+</main>
+<%- include('partials/footer') %>
