@@ -1,46 +1,23 @@
-<div class="page-header">
-  <h1><i class="fas fa-pills"></i> Your Medications</h1>
-  <p>Medications from your Medicare claims and pharmacy records</p>
+<div class="max-w-7xl mx-auto px-4 py-8">
+  <div class="flex justify-between items-center mb-8">
+    <div><h1 class="text-3xl font-serif font-bold">Medications</h1><p class="text-gray-600 mt-1">Your prescriptions and Part D coverage</p></div>
+    <a href="/dashboard" class="btn-secondary text-sm">Back to Dashboard</a>
+  </div>
+  <% if (typeof medications !== 'undefined' && medications && medications.length > 0) { %>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <% medications.forEach(function(med) { %>
+        <div class="card">
+          <h3 class="font-semibold text-navy text-lg"><%= med.name || 'Unknown Medication' %></h3>
+          <p class="text-sm text-gray-500 mt-1">Dosage: <%= med.dosage || 'N/A' %></p>
+          <p class="text-sm text-gray-500">Prescriber: <%= med.prescriber || 'N/A' %></p>
+          <p class="text-sm text-gray-500">Last Filled: <%= med.lastFilled || 'N/A' %></p>
+        </div>
+      <% }); %>
+    </div>
+  <% } else { %>
+    <div class="card text-center py-12">
+      <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+      <p class="text-gray-500">No medication data available yet.</p>
+    </div>
+  <% } %>
 </div>
-
-<% if (typeof medications !== 'undefined' && medications.length > 0) { %>
-  <div class="med-summary">
-    <span class="badge"><%= medications.length %> medications on file</span>
-    <a href="#" class="btn btn-secondary btn-sm"><i class="fas fa-prescription-bottle-alt"></i> Connect with SelectRx</a>
-  </div>
-
-  <div class="med-grid">
-    <% medications.forEach(med => { %>
-      <div class="med-card <%= med.adherence_score < 80 ? 'med-alert' : '' %>">
-        <div class="med-header">
-          <h3><%= med.drug_name %></h3>
-          <% if (med.adherence_score !== null) { %>
-            <div class="adherence-badge <%= med.adherence_score >= 80 ? 'good' : 'low' %>">
-              <%= med.adherence_score %>% adherence
-            </div>
-          <% } %>
-        </div>
-        <div class="med-details">
-          <p><strong>Dosage:</strong> <%= med.dosage || 'Not specified' %></p>
-          <p><strong>Prescriber:</strong> <%= med.prescriber || 'Unknown' %></p>
-          <p><strong>Last Filled:</strong> <%= med.fill_date ? new Date(med.fill_date).toLocaleDateString() : 'N/A' %></p>
-          <p><strong>Days Supply:</strong> <%= med.days_supply || 'N/A' %></p>
-          <p><strong>NDC:</strong> <%= med.ndc_code || 'N/A' %></p>
-        </div>
-        <% if (med.adherence_score !== null && med.adherence_score < 80) { %>
-          <div class="med-alert-msg">
-            <i class="fas fa-exclamation-circle"></i>
-            Low adherence detected. SelectRx can help with medication synchronization.
-          </div>
-        <% } %>
-      </div>
-    <% }); %>
-  </div>
-<% } else { %>
-  <div class="empty-state">
-    <i class="fas fa-pills"></i>
-    <h2>No Medications Found</h2>
-    <p>Sync your Medicare data to see your medication history.</p>
-    <a href="/bluebutton/sync" class="btn btn-primary">Sync Medicare Data</a>
-  </div>
-<% } %>

@@ -3,66 +3,99 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= typeof title !== 'undefined' ? title : 'Healthcare Select Patient Hub' %></title>
+  <title><%= typeof title !== 'undefined' ? title : '' %> | Healthcare Select</title>
+  <script src="https://cdn.tailwindcss.com" nonce="<%= typeof cspNonce !== 'undefined' ? cspNonce : '' %>"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script nonce="<%= typeof cspNonce !== 'undefined' ? cspNonce : '' %>">
+    tailwind.config = { theme: { extend: { colors: { navy: '#1B3D6E', red: '#C8102E', lightgray: '#F5F7FA' }, fontFamily: { serif: ['Lora', 'serif'], sans: ['Inter', 'sans-serif'] } } } }
+  </script>
 </head>
-<body>
-  <nav class="navbar">
-    <div class="nav-brand">
-      <i class="fas fa-heartbeat"></i>
-      <span>Healthcare Select Patient Hub</span>
+<body class="font-sans bg-gray-50 text-gray-800 min-h-screen flex flex-col">
+  <nav class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16 items-center">
+        <div class="flex items-center space-x-2">
+          <svg class="w-8 h-8 text-red" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+          <a href="/" class="text-xl font-serif font-bold text-navy">Healthcare Select</a>
+        </div>
+        <div class="hidden md:flex items-center space-x-1">
+          <a href="/" class="nav-link">Home</a>
+          <div class="relative group">
+            <button class="nav-link inline-flex items-center">Medicare Resources <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+            <div class="absolute left-0 mt-1 w-56 dropdown-menu hidden group-hover:block py-2 z-50">
+              <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Medicare Advantage</a>
+              <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Medicare Supplement</a>
+              <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Medicare Part D</a>
+              <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Resources</a>
+            </div>
+          </div>
+          <div class="relative group">
+            <button class="nav-link inline-flex items-center">Plan Tools <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+            <div class="absolute left-0 mt-1 w-56 dropdown-menu hidden group-hover:block py-2 z-50">
+              <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">AI Plan Compare</a>
+              <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">AI Plan Recommender</a>
+              <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Verify Current Coverage</a>
+              <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Find Best Plan</a>
+            </div>
+          </div>
+          <% if (typeof user !== 'undefined' && user) { %>
+            <a href="/dashboard" class="nav-link">Dashboard</a>
+            <a href="/auth/logout" class="btn-primary text-sm">Sign Out</a>
+          <% } else { %>
+            <a href="/auth/login" class="btn-primary text-sm">Sign In with Medicare</a>
+          <% } %>
+        </div>
+        <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-gray-100" aria-label="Menu">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
     </div>
-    <div class="nav-links">
+    <div id="mobile-menu" class="md:hidden hidden border-t bg-white px-4 py-3 space-y-2">
+      <a href="/" class="block py-2 nav-link">Home</a>
+      <a href="#" class="block py-2 nav-link">Medicare Advantage</a>
+      <a href="#" class="block py-2 nav-link">Medicare Supplement</a>
+      <a href="#" class="block py-2 nav-link">Medicare Part D</a>
+      <a href="#" class="block py-2 nav-link">AI Plan Compare</a>
+      <a href="#" class="block py-2 nav-link">AI Plan Recommender</a>
       <% if (typeof user !== 'undefined' && user) { %>
-        <a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-        <a href="/medications"><i class="fas fa-pills"></i> Medications</a>
-        <a href="/claims"><i class="fas fa-file-medical"></i> Claims</a>
-        <a href="/care-gaps"><i class="fas fa-exclamation-triangle"></i> Care Gaps</a>
-        <a href="/survey"><i class="fas fa-clipboard-list"></i> Health Survey</a>
-        <a href="/auth/logout" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        <a href="/dashboard" class="block py-2 nav-link">Dashboard</a>
+        <a href="/auth/logout" class="block py-2 text-red-600">Sign Out</a>
       <% } else { %>
-        <a href="/auth/login" class="btn-login"><i class="fas fa-sign-in-alt"></i> Connect with Medicare</a>
+        <a href="/auth/login" class="block py-2 btn-primary text-center">Sign In with Medicare</a>
       <% } %>
     </div>
-    <button class="nav-toggle" aria-label="Toggle navigation">
-      <i class="fas fa-bars"></i>
-    </button>
   </nav>
-  <% if (typeof flash !== 'undefined' && flash) { %>
-    <div class="alert alert-<%= flash.type %>">
-      <i class="fas fa-<%= flash.type === 'success' ? 'check-circle' : 'exclamation-circle' %>"></i>
-      <%= flash.message %>
-    </div>
-  <% } %>
-  <main class="container">
-    <%- body %>
-  </main>
-  <footer class="footer">
-    <div class="footer-content">
-      <div class="footer-section">
-        <h4>Healthcare Select Patient Hub</h4>
-        <p>Powered by CMS Blue Button 2.0</p>
-        <p>Your data. Your health. Your decisions.</p>
+  <main class="flex-1"><%- body %></main>
+  <footer class="bg-navy text-white mt-12">
+    <div class="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div>
+        <h3 class="text-lg font-serif font-bold text-white mb-4">Healthcare Select</h3>
+        <p class="text-gray-300 text-sm">Powered by Blue Button 2.0. Your trusted Medicare health OS.</p>
       </div>
-      <div class="footer-section">
-        <h4>Our Services</h4>
-        <p>Healthcare Services Virtual Care</p>
-        <p>SelectRx Pharmacy</p>
-        <p>Chronic Care Management</p>
-        <p>Healthcare Select Surveys</p>
+      <div>
+        <h4 class="font-semibold text-white mb-3">Quick Links</h4>
+        <div class="space-y-2 text-sm text-gray-300">
+          <a href="/privacy" class="block hover:text-white">Privacy Policy</a>
+          <a href="/terms" class="block hover:text-white">Terms of Service</a>
+          <a href="/consent" class="block hover:text-white">Data Consent</a>
+        </div>
       </div>
-      <div class="footer-section">
-        <h4>Compliance</h4>
-        <p>HIPAA Compliant</p>
-        <p>CMS Blue Button 2.0 Certified</p>
-        <p>AES-256 Encryption</p>
+      <div>
+        <h4 class="font-semibold text-white mb-3">Support</h4>
+        <p class="text-gray-300 text-sm">1-800-MEDICARE (1-800-633-4227)</p>
+        <p class="text-gray-300 text-sm mt-1">TTY: 1-877-486-2048</p>
       </div>
     </div>
-    <div class="footer-bottom">
-      <p>&copy; <%= new Date().getFullYear() %> SelectQuote Healthcare. All rights reserved.</p>
+    <div class="border-t border-gray-600 py-4 text-center text-sm text-gray-400">
+      &copy; <%= new Date().getFullYear() %> Healthcare Select. All rights reserved.
     </div>
   </footer>
-  <script src="/js/app.js"></script>
+  <script nonce="<%= typeof cspNonce !== 'undefined' ? cspNonce : '' %>">
+    document.getElementById('mobile-menu-btn')?.addEventListener('click', () => {
+      document.getElementById('mobile-menu')?.classList.toggle('hidden');
+    });
+  </script>
 </body>
 </html>

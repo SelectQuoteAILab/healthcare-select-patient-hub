@@ -1,57 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= title %></title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    .hero { background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%); min-height: 80vh; }
-    .feature-icon { font-size: 2.5rem; color: #0d6efd; }
-  </style>
-</head>
-<body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div class="container">
-      <a class="navbar-brand fw-bold" href="/">Healthcare Select Patient Hub</a>
-      <div class="navbar-nav ms-auto">
-        <a class="nav-link" href="/auth/connect-medicare">Connect Medicare</a>
-      </div>
-    </div>
-  </nav>
-  <section class="hero d-flex align-items-center text-white">
-    <div class="container text-center">
-      <h1 class="display-3 fw-bold mb-4">Your Medicare Health Dashboard</h1>
-      <p class="lead mb-4">Connect your Medicare account to access claims, medications, care gaps, and personalized health insights powered by Blue Button 2.0.</p>
-      <a href="/auth/connect-medicare" class="btn btn-light btn-lg px-5 py-3 fw-bold">Connect Your Medicare Account</a>
-    </div>
-  </section>
-  <section class="py-5">
-    <div class="container">
-      <div class="row g-4">
-        <div class="col-md-4 text-center">
-          <div class="feature-icon mb-3">&#128202;</div>
-          <h4>Claims & Coverage</h4>
-          <p>View your Medicare claims history and coverage details in one place.</p>
-        </div>
-        <div class="col-md-4 text-center">
-          <div class="feature-icon mb-3">&#128138;</div>
-          <h4>Medications</h4>
-          <p>Track prescriptions, costs, and get medication adherence insights.</p>
-        </div>
-        <div class="col-md-4 text-center">
-          <div class="feature-icon mb-3">&#128200;</div>
-          <h4>Care Gap Analysis</h4>
-          <p>Identify preventive care opportunities and close health gaps.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-  <footer class="bg-dark text-white py-4">
-    <div class="container text-center">
-      <p class="mb-1">&copy; 2026 Healthcare Select Patient Hub</p>
-      <p class="small"><a href="/privacy" class="text-white-50">Privacy Policy</a> | <a href="/terms" class="text-white-50">Terms of Service</a></p>
-    </div>
-  </footer>
-</body>
-</html>
+<section class="hero-section py-20 px-4">
+  <div class="max-w-4xl mx-auto text-center">
+    <h1 class="text-4xl md:text-5xl font-serif font-bold text-white mb-6">Welcome to Healthcare Select</h1>
+    <p class="text-xl text-gray-200 mb-8">Your comprehensive Medicare health management platform</p>
+    <a href="/auth/login" class="inline-block bg-red text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-red-700 transition">Get Started</a>
+  </div>
+</section>

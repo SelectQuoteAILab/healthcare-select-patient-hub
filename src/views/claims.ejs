@@ -1,42 +1,30 @@
-<div class="page-header">
-  <h1><i class="fas fa-file-medical"></i> Claims History</h1>
-  <p>Your Medicare Explanation of Benefits from Blue Button 2.0</p>
+<div class="max-w-7xl mx-auto px-4 py-8">
+  <div class="flex justify-between items-center mb-8">
+    <div><h1 class="text-3xl font-serif font-bold">Claims History</h1><p class="text-gray-600 mt-1">Your Medicare Explanations of Benefits</p></div>
+    <a href="/dashboard" class="btn-secondary text-sm">Back to Dashboard</a>
+  </div>
+  <% if (typeof claims !== 'undefined' && claims && claims.length > 0) { %>
+    <div class="space-y-4">
+      <% claims.forEach(function(claim) { %>
+        <div class="card">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="font-semibold text-navy"><%= claim.type || 'Medicare Claim' %></p>
+              <p class="text-sm text-gray-500 mt-1">Date: <%= claim.date || 'N/A' %></p>
+              <p class="text-sm text-gray-500">Provider: <%= claim.provider || 'N/A' %></p>
+            </div>
+            <div class="text-right">
+              <p class="text-lg font-bold text-navy">$<%= claim.amount || '0.00' %></p>
+              <span class="inline-block mt-1 px-3 py-1 text-xs rounded-full <%= claim.status === 'paid' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700' %>"><%= claim.status || 'pending' %></span>
+            </div>
+          </div>
+        </div>
+      <% }); %>
+    </div>
+  <% } else { %>
+    <div class="card text-center py-12">
+      <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+      <p class="text-gray-500">No claims data available yet. Connect your Medicare account to view claims.</p>
+    </div>
+  <% } %>
 </div>
-
-<% if (typeof claims !== 'undefined' && claims.length > 0) { %>
-  <div class="claims-summary">
-    <div class="summary-stat"><strong><%= claims.length %></strong> claims</div>
-    <div class="summary-stat"><strong>$<%= totalSpend %></strong> total</div>
-  </div>
-  <div class="claims-table-wrap">
-    <table class="data-table">
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Type</th>
-          <th>Provider</th>
-          <th>Diagnosis</th>
-          <th>Amount</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% claims.forEach(claim => { %>
-          <tr>
-            <td><%= claim.date || 'N/A' %></td>
-            <td><span class="type-badge"><%= claim.type || 'EOB' %></span></td>
-            <td><%= claim.provider || 'Unknown' %></td>
-            <td><%= claim.diagnosis || 'N/A' %></td>
-            <td class="amount">$<%= claim.amount ? claim.amount.toFixed(2) : '0.00' %></td>
-          </tr>
-        <% }); %>
-      </tbody>
-    </table>
-  </div>
-<% } else { %>
-  <div class="empty-state">
-    <i class="fas fa-file-medical"></i>
-    <h2>No Claims Found</h2>
-    <p>Sync your Medicare data to see your claims history.</p>
-    <a href="/bluebutton/sync" class="btn btn-primary">Sync Medicare Data</a>
-  </div>
-<% } %>

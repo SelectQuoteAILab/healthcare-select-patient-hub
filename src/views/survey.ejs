@@ -1,120 +1,17 @@
-<div class="page-header">
-  <h1><i class="fas fa-clipboard-list"></i> Health & Lifestyle Survey</h1>
-  <p>Help us personalize your care recommendations by answering these questions</p>
-</div>
-
-<form action="/survey" method="POST" class="survey-form">
-  <div class="survey-section">
-    <h2>General Health</h2>
-    <div class="survey-question">
-      <label>How would you rate your overall health?</label>
-      <select name="overall_health" required>
-        <option value="">Select...</option>
-        <option value="Excellent">Excellent</option>
-        <option value="Very Good">Very Good</option>
-        <option value="Good">Good</option>
-        <option value="Fair">Fair</option>
-        <option value="Poor">Poor</option>
-      </select>
-    </div>
-    <div class="survey-question">
-      <label>Do you have any chronic conditions? (check all that apply)</label>
-      <div class="checkbox-group">
-        <label><input type="checkbox" name="conditions" value="diabetes"> Diabetes</label>
-        <label><input type="checkbox" name="conditions" value="hypertension"> Hypertension</label>
-        <label><input type="checkbox" name="conditions" value="heart_disease"> Heart Disease</label>
-        <label><input type="checkbox" name="conditions" value="copd"> COPD</label>
-        <label><input type="checkbox" name="conditions" value="arthritis"> Arthritis</label>
-        <label><input type="checkbox" name="conditions" value="depression"> Depression</label>
-        <label><input type="checkbox" name="conditions" value="none"> None</label>
+<div class="max-w-3xl mx-auto px-4 py-8">
+  <h1 class="text-3xl font-serif font-bold mb-2">Health Survey</h1>
+  <p class="text-gray-600 mb-8">Help us personalize your care recommendations</p>
+  <form method="POST" action="/survey" class="space-y-6">
+    <% if (typeof csrfToken !== 'undefined') { %><input type="hidden" name="_csrf" value="<%= csrfToken %>"><% } %>
+    <div class="card">
+      <label class="block font-semibold text-navy mb-2">How would you rate your overall health?</label>
+      <div class="space-y-2">
+        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="health_rating" value="excellent" class="w-4 h-4"><span>Excellent</span></label>
+        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="health_rating" value="good" class="w-4 h-4"><span>Good</span></label>
+        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="health_rating" value="fair" class="w-4 h-4"><span>Fair</span></label>
+        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="health_rating" value="poor" class="w-4 h-4"><span>Poor</span></label>
       </div>
     </div>
-  </div>
-
-  <div class="survey-section">
-    <h2>Medication Management</h2>
-    <div class="survey-question">
-      <label>Do you ever have difficulty taking medications as prescribed?</label>
-      <select name="med_difficulty">
-        <option value="">Select...</option>
-        <option value="Never">Never</option>
-        <option value="Rarely">Rarely</option>
-        <option value="Sometimes">Sometimes</option>
-        <option value="Often">Often</option>
-        <option value="Always">Always</option>
-      </select>
-    </div>
-    <div class="survey-question">
-      <label>What barriers do you face with medications?</label>
-      <select name="med_barriers">
-        <option value="">Select...</option>
-        <option value="None">None</option>
-        <option value="Cost concerns">Cost concerns</option>
-        <option value="Side effects">Side effects</option>
-        <option value="Forgetting">Forgetting to take them</option>
-        <option value="Too many">Too many medications</option>
-        <option value="Understanding">Don't understand why I need them</option>
-      </select>
-    </div>
-  </div>
-
-  <div class="survey-section">
-    <h2>Lifestyle & Wellness</h2>
-    <div class="survey-question">
-      <label>How often do you feel socially isolated?</label>
-      <select name="social_isolation">
-        <option value="">Select...</option>
-        <option value="Never">Never</option>
-        <option value="Rarely">Rarely</option>
-        <option value="Sometimes">Sometimes</option>
-        <option value="Often">Often</option>
-        <option value="Always">Always</option>
-      </select>
-    </div>
-    <div class="survey-question">
-      <label>How would you rate your physical activity level?</label>
-      <select name="activity_level">
-        <option value="">Select...</option>
-        <option value="Very Active">Very Active</option>
-        <option value="Active">Active</option>
-        <option value="Moderate">Moderate</option>
-        <option value="Sedentary">Sedentary</option>
-      </select>
-    </div>
-    <div class="survey-question">
-      <label>Do you have reliable transportation to medical appointments?</label>
-      <select name="transportation">
-        <option value="">Select...</option>
-        <option value="Yes">Yes, always</option>
-        <option value="Sometimes">Sometimes</option>
-        <option value="No">No, it's a barrier</option>
-      </select>
-    </div>
-  </div>
-
-  <div class="survey-section">
-    <h2>Healthcare Access</h2>
-    <div class="survey-question">
-      <label>Are you interested in virtual care visits?</label>
-      <select name="virtual_care_interest">
-        <option value="">Select...</option>
-        <option value="Very interested">Very interested</option>
-        <option value="Somewhat interested">Somewhat interested</option>
-        <option value="Not interested">Not interested</option>
-      </select>
-    </div>
-    <div class="survey-question">
-      <label>Would you like help managing your medications through a pharmacy service?</label>
-      <select name="pharmacy_interest">
-        <option value="">Select...</option>
-        <option value="Yes">Yes</option>
-        <option value="Maybe">Maybe</option>
-        <option value="No">No</option>
-      </select>
-    </div>
-  </div>
-
-  <button type="submit" class="btn btn-primary btn-lg">
-    <i class="fas fa-paper-plane"></i> Submit Survey
-  </button>
-</form>
+    <button type="submit" class="btn-primary w-full">Submit Survey</button>
+  </form>
+</div>
