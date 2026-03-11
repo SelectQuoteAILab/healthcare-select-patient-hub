@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: healthcare-select-patient-hub
+    runtime: node
+    buildCommand: npm install
+    startCommand: node src/server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: ENCRYPTION_KEY
+        generateValue: true
+      - key: BB_CLIENT_ID
+        sync: false
+      - key: BB_CLIENT_SECRET
+        sync: false
+      - key: BB_CALLBACK_URL
+        sync: false
+      - key: BB_AUTH_URL
+        value: https://sandbox.bluebutton.cms.gov/v1/o/authorize/
+      - key: BB_TOKEN_URL
+        value: https://sandbox.bluebutton.cms.gov/v1/o/token/
+      - key: BB_API_BASE
+        value: https://sandbox.bluebutton.cms.gov/v2/fhir
+      - key: LOG_LEVEL
+        value: info
+      - key: AUDIT_LOG_ENABLED
+        value: true
