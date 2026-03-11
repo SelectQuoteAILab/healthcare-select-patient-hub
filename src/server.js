@@ -8,6 +8,7 @@ const compression = require('compression');
 const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
 const { v4: uuidv4 } = require('uuid');
+const expressLayouts = require('express-ejs-layouts');
 const winston = require('winston');
 
 const app = express();
@@ -60,6 +61,8 @@ app.use(rateLimit({ windowMs: 15*60*1000, max: 100 }));
 // View engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+app.use(expressLayouts);
+app.set('layout', 'layout');
 
 // Global template vars
 app.use((req, res, next) => {
