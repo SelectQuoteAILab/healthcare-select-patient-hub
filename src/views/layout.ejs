@@ -3,68 +3,118 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= title %> | Healthcare Select</title>
+  <title><%= typeof title !== 'undefined' ? title : 'Your Health Journey' %> | Healthcare Select</title>
   <script src="https://cdn.tailwindcss.com" nonce="<%= typeof cspNonce !== 'undefined' ? cspNonce : '' %>"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    body { font-family: 'Inter', sans-serif; }
-    h1, h2, h3 { font-family: 'Lora', serif; }
-    .brand-navy { color: #1B3D6E; }
-    .bg-brand-navy { background-color: #1B3D6E; }
-    .brand-red { color: #C8102E; }
-    .bg-brand-red { background-color: #C8102E; }
-  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <script nonce="<%= typeof cspNonce !== 'undefined' ? cspNonce : '' %>">
+    tailwind.config={theme:{extend:{colors:{navy:'#1B3D6E',red:'#C8102E',lightgray:'#F5F7FA'},fontFamily:{serif:['Lora','serif'],sans:['Inter','sans-serif']}}}}
+  </script>
 </head>
-<body class="bg-gray-50 min-h-screen flex flex-col">
-  <!-- Navigation -->
-  <nav class="bg-brand-navy text-white shadow-lg">
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
+
+  <!-- ====== NAVIGATION ====== -->
+  <nav class="nav-blur text-white shadow-lg sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16 items-center">
-        <a href="/" class="text-xl font-bold tracking-tight">Healthcare Select</a>
-        <button id="mobileMenuBtn" class="md:hidden p-2 rounded" onclick="document.getElementById('mobileMenu').classList.toggle('hidden')">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-        </button>
-        <div class="hidden md:flex items-center space-x-6">
+        <a href="/" class="flex items-center space-x-2 group">
+          <svg class="w-8 h-8 text-red-400 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          <span class="text-xl font-bold tracking-tight">Healthcare Select</span>
+        </a>
+        <!-- Desktop Nav -->
+        <div class="hidden md:flex items-center space-x-1">
           <% if (typeof user !== 'undefined' && user) { %>
-            <a href="/dashboard" class="hover:text-gray-300 transition">Dashboard</a>
-            <a href="/dashboard/medications" class="hover:text-gray-300 transition">Medications</a>
-            <a href="/dashboard/care-gaps" class="hover:text-gray-300 transition">Care Gaps</a>
-            <a href="/dashboard/plan-insights" class="hover:text-gray-300 transition">Plan Insights</a>
-            <a href="/dashboard/care-team" class="hover:text-gray-300 transition">Care Team</a>
-            <a href="/dashboard/assessment" class="hover:text-gray-300 transition">Assessment</a>
-            <a href="/auth/logout" class="bg-brand-red px-4 py-2 rounded-lg hover:opacity-90 transition">Logout</a>
+            <a href="/dashboard" class="px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/10 transition">Dashboard</a>
+            <a href="/dashboard/medications" class="px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/10 transition">Medications</a>
+            <a href="/dashboard/care-gaps" class="px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/10 transition">Care Gaps</a>
+            <a href="/dashboard/plan-insights" class="px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/10 transition">Plan Insights</a>
+            <a href="/dashboard/care-team" class="px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/10 transition">Care Team</a>
+            <a href="/dashboard/assessment" class="px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/10 transition">Assessment</a>
+            <a href="/auth/logout" class="ml-3 bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg text-sm font-semibold transition">Sign Out</a>
           <% } else { %>
-            <a href="/auth/demo" class="bg-white text-brand-navy px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition">Try Demo</a>
-            <a href="/auth/login" class="bg-brand-red px-4 py-2 rounded-lg hover:opacity-90 transition">Connect Medicare</a>
+            <a href="/auth/demo" class="px-4 py-2 rounded-lg text-sm font-medium border border-white/25 hover:bg-white/10 transition">Try Demo</a>
+            <a href="/auth/login" class="ml-2 bg-red-600 hover:bg-red-700 px-5 py-2 rounded-lg text-sm font-semibold cta-glow transition">Connect Medicare</a>
           <% } %>
         </div>
+        <!-- Mobile hamburger -->
+        <button id="mobileMenuBtn" class="md:hidden p-2 rounded-lg hover:bg-white/10 transition" aria-label="Open menu">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
       </div>
     </div>
     <!-- Mobile menu -->
-    <div id="mobileMenu" class="hidden md:hidden px-4 pb-4 space-y-2">
-      <% if (typeof user !== 'undefined' && user) { %>
-        <a href="/dashboard" class="block py-2 hover:text-gray-300">Dashboard</a>
-        <a href="/dashboard/medications" class="block py-2 hover:text-gray-300">Medications</a>
-        <a href="/dashboard/care-gaps" class="block py-2 hover:text-gray-300">Care Gaps</a>
-        <a href="/dashboard/plan-insights" class="block py-2 hover:text-gray-300">Plan Insights</a>
-        <a href="/dashboard/care-team" class="block py-2 hover:text-gray-300">Care Team</a>
-        <a href="/dashboard/assessment" class="block py-2 hover:text-gray-300">Assessment</a>
-        <a href="/auth/logout" class="block py-2 text-red-300">Logout</a>
-      <% } else { %>
-        <a href="/auth/demo" class="block py-2">Try Demo</a>
-        <a href="/auth/login" class="block py-2">Connect Medicare</a>
-      <% } %>
+    <div id="mobileMenu" class="hidden md:hidden border-t border-white/10 pb-4">
+      <div class="px-4 pt-3 space-y-1">
+        <% if (typeof user !== 'undefined' && user) { %>
+          <a href="/dashboard" class="block py-2.5 px-3 rounded-lg hover:bg-white/10 transition text-sm">Dashboard</a>
+          <a href="/dashboard/medications" class="block py-2.5 px-3 rounded-lg hover:bg-white/10 transition text-sm">Medications</a>
+          <a href="/dashboard/care-gaps" class="block py-2.5 px-3 rounded-lg hover:bg-white/10 transition text-sm">Care Gaps</a>
+          <a href="/dashboard/plan-insights" class="block py-2.5 px-3 rounded-lg hover:bg-white/10 transition text-sm">Plan Insights</a>
+          <a href="/dashboard/care-team" class="block py-2.5 px-3 rounded-lg hover:bg-white/10 transition text-sm">Care Team</a>
+          <a href="/dashboard/assessment" class="block py-2.5 px-3 rounded-lg hover:bg-white/10 transition text-sm">Assessment</a>
+          <a href="/auth/logout" class="block py-2.5 px-3 mt-2 rounded-lg bg-red-600 text-center font-semibold text-sm">Sign Out</a>
+        <% } else { %>
+          <a href="/auth/demo" class="block py-2.5 px-3 rounded-lg border border-white/25 text-center text-sm">Try Demo</a>
+          <a href="/auth/login" class="block py-2.5 px-3 mt-2 rounded-lg bg-red-600 text-center font-semibold text-sm">Connect Medicare</a>
+        <% } %>
+      </div>
     </div>
   </nav>
 
-  <main class="flex-1">
-    <%- body %>
-  </main>
+  <!-- ====== MAIN CONTENT ====== -->
+  <main class="flex-1"><%- body %></main>
 
-  <footer class="bg-brand-navy text-white py-8 mt-12">
-    <div class="max-w-7xl mx-auto px-4 text-center">
-      <p class="text-sm opacity-75">&copy; 2025 Healthcare Select. All rights reserved. | HIPAA Compliant</p>
+  <!-- ====== FOOTER ====== -->
+  <footer class="bg-brand-navy text-white">
+    <div class="max-w-7xl mx-auto px-4 py-16">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
+        <div class="md:col-span-1">
+          <div class="flex items-center space-x-2 mb-4">
+            <svg class="w-7 h-7 text-red-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            <span class="text-lg font-bold">Healthcare Select</span>
+          </div>
+          <p class="text-gray-300 text-sm leading-relaxed">Your partner in the healthcare journey. Powered by Blue Button 2.0 and backed by a complete care ecosystem including SelectRx, virtual care, and chronic care management.</p>
+        </div>
+        <div>
+          <h4 class="font-semibold mb-4 text-sm uppercase tracking-wider text-gray-200">Our Ecosystem</h4>
+          <ul class="space-y-2.5 text-sm text-gray-400">
+            <li class="hover:text-white transition cursor-default">SelectRx Pharmacy</li>
+            <li class="hover:text-white transition cursor-default">Virtual Care Practice (50 States)</li>
+            <li class="hover:text-white transition cursor-default">CCM / RPM / RTM Services</li>
+            <li class="hover:text-white transition cursor-default">Healthcare Select Data Intelligence</li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold mb-4 text-sm uppercase tracking-wider text-gray-200">Resources</h4>
+          <ul class="space-y-2.5 text-sm text-gray-400">
+            <li><a href="/privacy" class="hover:text-white transition">Privacy Policy</a></li>
+            <li><a href="/terms" class="hover:text-white transition">Terms of Service</a></li>
+            <li><a href="/consent" class="hover:text-white transition">Data Consent</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold mb-4 text-sm uppercase tracking-wider text-gray-200">Support</h4>
+          <p class="text-sm text-gray-400">1-800-MEDICARE</p>
+          <p class="text-sm text-gray-400 mt-1">TTY: 1-877-486-2048</p>
+          <div class="mt-4 flex space-x-2">
+            <span class="inline-block px-2 py-1 bg-green-900/40 text-green-300 text-xs rounded-full">HIPAA Compliant</span>
+            <span class="inline-block px-2 py-1 bg-blue-900/40 text-blue-300 text-xs rounded-full">BB 2.0</span>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-white/10 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
+        <p>&copy; <%= new Date().getFullYear() %> Healthcare Select. All rights reserved.</p>
+        <p class="mt-2 md:mt-0">Take Control of Your Healthcare Journey</p>
+      </div>
     </div>
   </footer>
+
+  <script nonce="<%= typeof cspNonce !== 'undefined' ? cspNonce : '' %>">
+    document.getElementById('mobileMenuBtn')?.addEventListener('click',function(){
+      var m=document.getElementById('mobileMenu');
+      if(m) m.classList.toggle('hidden');
+    });
+  </script>
 </body>
 </html>
