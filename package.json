@@ -5,7 +5,8 @@
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
-    "dev": "nodemon src/server.js"
+    "dev": "nodemon src/server.js",
+    "audit": "npm audit --audit-level=high"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -23,7 +24,10 @@
     "winston": "^3.11.0",
     "connect-sqlite3": "^0.9.15",
     "better-sqlite3": "^9.4.3",
-    "crypto-js": "^4.2.0"
+    "crypto-js": "^4.2.0",
+    "cookie-parser": "^1.4.6",
+    "csrf-csrf": "^3.0.3",
+    "express-validator": "^7.0.1"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"
