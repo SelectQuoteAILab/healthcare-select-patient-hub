@@ -3,6 +3,28 @@ const path = require('path');
 const logger = require('../utils/logger');
 const crypto = require('crypto');
 
+// ── Encryption key bootstrap ──────────────────────────────────────────────────
+// HARD FAIL: a random fallback would silently re-key on every restart, making
+// all previously encrypted PHI (tokens, claims) permanently unreadable.
+if (!process.env.ENCRYPTION_KEY) {
+  throw new Error(
+    'FATAL: ENCRYPTION_KEY environment variable is not set. ' +
+    'Generate one with: node -e "console.log(require(\'crypto\').randomBytes(32).toString(\'hex\'))"'
+  );
+}
+
+// Key must be exactly 32 bytes (64 hex chars) for AES-256.
+const RAW_KEY = process.env.ENCRYPTION_KEY;
+if (!/^[0-9a-fA-F]{64}$/.test(RAW_KEY)) {
+  throw new Error(
+    'FATAL: ENCRYPTION_KEY must be exactly 64 hex characters (32 bytes). ' +
+    'Generate one with: node -e "console.log(require(\'crypto\').randomBytes(32).toString(\'hex\'))"'
+  );
+}
+const ENCRYPTION_KEY_BUF = Buffer.from(RAW_KEY, 'hex');
+
+// ── Database singleton ────────────────────────────────────────────────────────
+
 let db;
 
 function getDb() {
@@ -17,6 +39,8 @@ function getDb() {
   }
   return db;
 }
+
+// ── Schema ────────────────────────────────────────────────────────────────────
 
 function initDatabase() {
   return new Promise((resolve, reject) => {
@@ -121,23 +145,70 @@ function initDatabase() {
   });
 }
 
-const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY || crypto.randomBytes(32).toString('hex');
+// ── AES-256-GCM Encryption Helpers ───────────────────────────────────────────
+//
+// Wire format (all hex, colon-delimited):  iv:authTag:ciphertext
+//
+//  • iv       – 12 bytes (96 bits) random nonce. GCM security depends on IV
+//               uniqueness per key; a fresh random IV is generated for EVERY
+//               encrypt() call, never reused.
+//  • authTag  – 16 bytes (128 bits) GCM authentication tag. Decryption will
+//               throw if the ciphertext or tag has been tampered with, giving
+//               both confidentiality AND integrity for stored PHI/tokens.
+//  • ciphertext – AES-256-GCM encrypted UTF-8 plaintext, hex-encoded.
+//
+// Why GCM over CBC:
+//  • CBC provides confidentiality only; an attacker who can flip ciphertext
+//    bytes can produce predictable plaintext changes (padding-oracle attacks).
+//  • GCM is an authenticated encryption mode: any bit-flip in storage causes
+//    decrypt() to throw, preventing silent data corruption or attack.
 
+/**
+ * Encrypts a UTF-8 plaintext string using AES-256-GCM.
+ * Returns a colon-delimited hex string: "iv:authTag:ciphertext"
+ *
+ * @param {string} text - plaintext to encrypt
+ * @returns {string} encrypted payload
+ */
 function encrypt(text) {
-  const iv = crypto.randomBytes(16);
-  const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(ENCRYPTION_KEY, 'hex'), iv);
+  // 12-byte IV is the NIST-recommended size for GCM; never reuse with same key.
+  const iv = crypto.randomBytes(12);
+  const cipher = crypto.createCipheriv('aes-256-gcm', ENCRYPTION_KEY_BUF, iv);
+
   let encrypted = cipher.update(text, 'utf8', 'hex');
   encrypted += cipher.final('hex');
-  return iv.toString('hex') + ':' + encrypted;
+
+  // authTag must be retrieved AFTER cipher.final()
+  const authTag = cipher.getAuthTag();
+
+  return `${iv.toString('hex')}:${authTag.toString('hex')}:${encrypted}`;
 }
 
-function decrypt(text) {
-  const parts = text.split(':');
-  const iv = Buffer.from(parts.shift(), 'hex');
-  const encrypted = parts.join(':');
-  const decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(ENCRYPTION_KEY, 'hex'), iv);
-  let decrypted = decipher.update(encrypted, 'hex', 'utf8');
+/**
+ * Decrypts a payload produced by encrypt().
+ * Throws if the authTag does not match (tampered or corrupted ciphertext).
+ *
+ * @param {string} payload - "iv:authTag:ciphertext" hex string
+ * @returns {string} decrypted UTF-8 plaintext
+ */
+function decrypt(payload) {
+  const parts = payload.split(':');
+  if (parts.length !== 3) {
+    throw new Error('Invalid encrypted payload format; expected iv:authTag:ciphertext');
+  }
+
+  const [ivHex, authTagHex, encryptedHex] = parts;
+  const iv = Buffer.from(ivHex, 'hex');
+  const authTag = Buffer.from(authTagHex, 'hex');
+
+  const decipher = crypto.createDecipheriv('aes-256-gcm', ENCRYPTION_KEY_BUF, iv);
+  // setAuthTag must be called before decipher.final() – GCM verifies on final()
+  decipher.setAuthTag(authTag);
+
+  let decrypted = decipher.update(encryptedHex, 'hex', 'utf8');
+  // final() throws crypto.ERR_CRYPTO_GCM_AUTH_TAG_MISMATCH if tag is invalid
   decrypted += decipher.final('utf8');
+
   return decrypted;
 }
 
