@@ -1,61 +1,234 @@
-<%- include('partials/header') %>
-
-<div class="bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 text-white">
-  <div class="max-w-7xl mx-auto px-4 py-20 sm:py-32">
-    <div class="text-center">
-      <h1 class="text-4xl sm:text-6xl font-bold mb-6">Your Health Command Center</h1>
-      <p class="text-xl sm:text-2xl text-blue-200 mb-10 max-w-3xl mx-auto">Connect your Medicare Blue Button data to get personalized insights, manage medications, close care gaps, and take control of your healthcare journey.</p>
-      <div class="flex flex-col sm:flex-row justify-center gap-4">
-        <a href="/auth/demo" class="bg-white text-blue-900 px-8 py-4 rounded-xl text-lg font-bold hover:bg-gray-100 transition shadow-lg">Try Demo</a>
-        <a href="/auth/login" class="bg-brand-red px-8 py-4 rounded-xl text-lg font-bold hover:opacity-90 transition shadow-lg">Connect Medicare Data</a>
+<!-- ====== HERO ====== -->
+<section class="hero-gradient text-white relative">
+  <div class="max-w-7xl mx-auto px-4 py-20 sm:py-28 lg:py-36 relative z-10">
+    <div class="grid lg:grid-cols-2 gap-12 items-center">
+      <div class="animate-fade-in-up">
+        <div class="inline-flex items-center bg-white/10 rounded-full px-4 py-1.5 mb-6 text-sm">
+          <span class="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></span>
+          Powered by CMS Blue Button 2.0
+        </div>
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+          Take Control of<br>
+          <span class="text-red-400">Your Health Journey</span>
+        </h1>
+        <p class="text-lg text-blue-100 mb-8 max-w-xl leading-relaxed">
+          Healthcare Select rides shotgun with you every step of the way. Connect your Medicare data, get AI-powered insights, and access a complete care ecosystem — from pharmacy to virtual care to chronic care management.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="/auth/demo" class="bg-white text-blue-900 px-8 py-4 rounded-xl text-lg font-semibold hover:bg-gray-100 transition text-center shadow-lg">Try the Demo</a>
+          <a href="/auth/login" class="bg-red-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-red-700 cta-glow transition text-center">Connect Medicare</a>
+        </div>
+        <p class="mt-4 text-sm text-blue-200/70">HIPAA compliant • Your data stays yours • 256-bit encryption</p>
+      </div>
+      <div class="hidden lg:block animate-fade-in-up delay-300">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="glass-card rounded-2xl p-6 animate-float">
+            <div class="text-3xl mb-3">&#x1F48A;</div>
+            <h3 class="font-semibold text-lg mb-1">SelectRx</h3>
+            <p class="text-sm text-blue-200">Premier medication management with compliance packaging</p>
+          </div>
+          <div class="glass-card rounded-2xl p-6 mt-8 animate-float delay-200">
+            <div class="text-3xl mb-3">&#x1FA7A;</div>
+            <h3 class="font-semibold text-lg mb-1">Virtual Care</h3>
+            <p class="text-sm text-blue-200">50-state licensed practice specializing in CCM, RPM &amp; RTM</p>
+          </div>
+          <div class="glass-card rounded-2xl p-6 animate-float delay-400">
+            <div class="text-3xl mb-3">&#x1F4CA;</div>
+            <h3 class="font-semibold text-lg mb-1">Health Intelligence</h3>
+            <p class="text-sm text-blue-200">Millions of first-party health &amp; lifestyle data points</p>
+          </div>
+          <div class="glass-card rounded-2xl p-6 mt-8 animate-float delay-600">
+            <div class="text-3xl mb-3">&#x2764;&#xFE0F;</div>
+            <h3 class="font-semibold text-lg mb-1">Your Guide</h3>
+            <p class="text-sm text-blue-200">Healthcare Select rides shotgun on your journey</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-</div>
+</section>
 
-<div class="max-w-7xl mx-auto px-4 py-16">
-  <h2 class="text-3xl font-bold text-center brand-navy mb-12">Powered by Blue Button 2.0</h2>
-  <div class="grid md:grid-cols-3 gap-8">
-    <div class="bg-white rounded-xl p-8 shadow-md text-center">
-      <div class="text-4xl mb-4">&#x1F48A;</div>
-      <h3 class="text-xl font-bold brand-navy mb-3">Medication Management</h3>
-      <p class="text-gray-600">Track medications, adherence scores, and get refill reminders powered by your claims data.</p>
-    </div>
-    <div class="bg-white rounded-xl p-8 shadow-md text-center">
-      <div class="text-4xl mb-4">&#x1F3AF;</div>
-      <h3 class="text-xl font-bold brand-navy mb-3">Care Gap Detection</h3>
-      <p class="text-gray-600">AI-powered analysis identifies missed screenings and preventive care opportunities.</p>
-    </div>
-    <div class="bg-white rounded-xl p-8 shadow-md text-center">
-      <div class="text-4xl mb-4">&#x1F4CA;</div>
-      <h3 class="text-xl font-bold brand-navy mb-3">Plan Insights</h3>
-      <p class="text-gray-600">Understand your spending, deductibles, and out-of-pocket costs in real time.</p>
-    </div>
-  </div>
-</div>
-
-<div class="bg-white py-16">
+<!-- ====== GUIDE BANNER: HC Select Rides Shotgun ====== -->
+<section class="py-16 bg-white">
   <div class="max-w-7xl mx-auto px-4">
-    <h2 class="text-3xl font-bold text-center brand-navy mb-12">Your Complete Health Ecosystem</h2>
-    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-      <div class="border-2 border-blue-100 rounded-xl p-6">
-        <h3 class="font-bold brand-navy mb-2">SelectRx Pharmacy</h3>
-        <p class="text-sm text-gray-600">50-state licensed pharmacy with home delivery and medication therapy management.</p>
+    <div class="guide-banner rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-center gap-8">
+      <div class="icon-circle-lg bg-red-100 text-red-600">
+        <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg>
       </div>
-      <div class="border-2 border-blue-100 rounded-xl p-6">
-        <h3 class="font-bold brand-navy mb-2">Virtual Care</h3>
-        <p class="text-sm text-gray-600">50-state licensed virtual care practice for convenient telehealth visits.</p>
-      </div>
-      <div class="border-2 border-blue-100 rounded-xl p-6">
-        <h3 class="font-bold brand-navy mb-2">CCM & RPM</h3>
-        <p class="text-sm text-gray-600">Chronic Care Management with Remote Patient Monitoring for ongoing support.</p>
-      </div>
-      <div class="border-2 border-blue-100 rounded-xl p-6">
-        <h3 class="font-bold brand-navy mb-2">Healthcare Select</h3>
-        <p class="text-sm text-gray-600">First-party health and lifestyle surveys powering personalized recommendations.</p>
+      <div class="flex-1">
+        <h2 class="text-2xl md:text-3xl font-bold brand-navy mb-3">Healthcare Select Rides Shotgun With You</h2>
+        <p class="text-gray-600 leading-relaxed">You are never alone on this journey. Healthcare Select leverages millions of first-party health and lifestyle data points gathered from real Americans to personalize your experience. We help you navigate every decision — from understanding your conditions and medications, to connecting you with the right care at the right time, to addressing the social determinants that impact your health every day.</p>
       </div>
     </div>
   </div>
-</div>
+</section>
 
-<%- include('partials/footer') %>
+<div class="section-divider max-w-5xl mx-auto"></div>
+
+<!-- ====== YOUR JOURNEY STEPS ====== -->
+<section class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold brand-navy mb-4">Your Journey. Your Control.</h2>
+      <p class="text-gray-600 max-w-2xl mx-auto text-lg">Four simple steps to take command of your healthcare — with Healthcare Select guiding you every step of the way.</p>
+    </div>
+    <div class="max-w-3xl mx-auto space-y-12">
+      <!-- Step 1 -->
+      <div class="journey-step flex gap-6">
+        <div class="icon-circle bg-blue-100 text-blue-700 font-bold text-lg mt-1">1</div>
+        <div>
+          <h3 class="text-xl font-bold brand-navy mb-2">Connect Your Medicare Data</h3>
+          <p class="text-gray-600 leading-relaxed">Securely link your CMS Blue Button 2.0 data in seconds. We pull 4 years of claims, medications, and coverage details — giving you a complete picture of your health history that no single doctor has.</p>
+        </div>
+      </div>
+      <!-- Step 2 -->
+      <div class="journey-step flex gap-6">
+        <div class="icon-circle bg-red-100 text-red-700 font-bold text-lg mt-1">2</div>
+        <div>
+          <h3 class="text-xl font-bold brand-navy mb-2">Get Your Personalized Health Profile</h3>
+          <p class="text-gray-600 leading-relaxed">AI analyzes your claims data alongside Healthcare Select's first-party survey insights to build a comprehensive health profile. We identify care gaps, medication risks, SDOH challenges, and opportunities you didn't know existed.</p>
+        </div>
+      </div>
+      <!-- Step 3 -->
+      <div class="journey-step flex gap-6">
+        <div class="icon-circle bg-green-100 text-green-700 font-bold text-lg mt-1">3</div>
+        <div>
+          <h3 class="text-xl font-bold brand-navy mb-2">Access Your Complete Care Ecosystem</h3>
+          <p class="text-gray-600 leading-relaxed">Connect to SelectRx for medication management and compliance packaging. Schedule virtual care visits with our 50-state licensed practice. Enroll in CCM, RPM, or RTM programs tailored to your chronic conditions. It all works together.</p>
+        </div>
+      </div>
+      <!-- Step 4 -->
+      <div class="journey-step flex gap-6">
+        <div class="icon-circle bg-purple-100 text-purple-700 font-bold text-lg mt-1">4</div>
+        <div>
+          <h3 class="text-xl font-bold brand-navy mb-2">Thrive With Ongoing Support</h3>
+          <p class="text-gray-600 leading-relaxed">Healthcare Select doesn't disappear after onboarding. We continuously monitor your adherence, flag care gaps before they become emergencies, and connect you with SDOH resources — food assistance, transportation, financial support — because health is about more than medicine.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider max-w-5xl mx-auto"></div>
+
+<!-- ====== ECOSYSTEM CARDS ====== -->
+<section class="py-20 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold brand-navy mb-4">A Complete Care Ecosystem</h2>
+      <p class="text-gray-600 max-w-2xl mx-auto text-lg">No other platform combines claims intelligence, pharmacy fulfillment, virtual care, and chronic care management under one roof.</p>
+    </div>
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- SelectRx -->
+      <div class="ecosystem-card bg-white p-8">
+        <div class="icon-circle bg-red-50 text-red-600 mb-5">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5"/></svg>
+        </div>
+        <h3 class="text-lg font-bold brand-navy mb-2">SelectRx Pharmacy</h3>
+        <p class="text-gray-600 text-sm leading-relaxed">The premier complex medication management company. Compliance packaging, constant coordination, and proven 90%+ adherence rates across the triple-weighted HEDIS measures.</p>
+      </div>
+      <!-- Virtual Care -->
+      <div class="ecosystem-card bg-white p-8">
+        <div class="icon-circle bg-blue-50 text-blue-600 mb-5">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25"/></svg>
+        </div>
+        <h3 class="text-lg font-bold brand-navy mb-2">Virtual Care Practice</h3>
+        <p class="text-gray-600 text-sm leading-relaxed">50-state licensed virtual care specializing in chronic care management, remote patient monitoring, and remote therapeutic monitoring. Care comes to you.</p>
+      </div>
+      <!-- CCM/RPM/RTM -->
+      <div class="ecosystem-card bg-white p-8">
+        <div class="icon-circle bg-green-50 text-green-600 mb-5">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6"/></svg>
+        </div>
+        <h3 class="text-lg font-bold brand-navy mb-2">CCM / RPM / RTM</h3>
+        <p class="text-gray-600 text-sm leading-relaxed">Proactive chronic care management with real-time vitals monitoring and therapeutic tracking. We catch problems before they become emergencies.</p>
+      </div>
+      <!-- HC Select Data -->
+      <div class="ecosystem-card bg-white p-8">
+        <div class="icon-circle bg-purple-50 text-purple-600 mb-5">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125"/></svg>
+        </div>
+        <h3 class="text-lg font-bold brand-navy mb-2">Health Intelligence</h3>
+        <p class="text-gray-600 text-sm leading-relaxed">Millions of first-party health and lifestyle survey data points from real Americans. We understand SDOH challenges — 74% manage 2+ chronic conditions, 75% take 5+ medications.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== WHAT YOU'LL SEE INSIDE ====== -->
+<section class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold brand-navy mb-4">What You'll See Inside</h2>
+      <p class="text-gray-600 max-w-2xl mx-auto text-lg">Your personalized health command center puts everything in one place.</p>
+    </div>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="stat-card p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25"/></svg>
+          </div>
+          <h3 class="font-bold brand-navy">Health Dashboard</h3>
+        </div>
+        <p class="text-gray-600 text-sm">Your complete health profile with conditions, coverage, medications, and spending — all in one view.</p>
+      </div>
+      <div class="stat-card p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center text-red-600">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126z"/></svg>
+          </div>
+          <h3 class="font-bold brand-navy">Care Gap Alerts</h3>
+        </div>
+        <p class="text-gray-600 text-sm">AI detects overdue screenings, missed vaccinations, and lapsed follow-ups before they become problems.</p>
+      </div>
+      <div class="stat-card p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center text-green-600">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3"/></svg>
+          </div>
+          <h3 class="font-bold brand-navy">Medication Tracker</h3>
+        </div>
+        <p class="text-gray-600 text-sm">Real-time adherence scoring, drug interaction alerts, and direct connection to SelectRx for compliance packaging.</p>
+      </div>
+      <div class="stat-card p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 rounded-lg bg-yellow-100 flex items-center justify-content text-yellow-600">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z"/></svg>
+          </div>
+          <h3 class="font-bold brand-navy">Plan Insights</h3>
+        </div>
+        <p class="text-gray-600 text-sm">Spending trends, coverage analysis, and optimization recommendations to ensure you have the best plan.</p>
+      </div>
+      <div class="stat-card p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 rounded-lg bg-indigo-100 flex items-center justify-center text-indigo-600">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"/></svg>
+          </div>
+          <h3 class="font-bold brand-navy">Care Team</h3>
+        </div>
+        <p class="text-gray-600 text-sm">All your providers in one view. Schedule virtual care visits, connect with your SelectRx pharmacist, and coordinate care.</p>
+      </div>
+      <div class="stat-card p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 rounded-lg bg-pink-100 flex items-center justify-center text-pink-600">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+          </div>
+          <h3 class="font-bold brand-navy">SDOH Support</h3>
+        </div>
+        <p class="text-gray-600 text-sm">Healthcare Select identifies social determinant challenges and connects you with food assistance, transportation, financial resources, and more.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== BOTTOM CTA ====== -->
+<section class="hero-gradient text-white relative">
+  <div class="max-w-4xl mx-auto px-4 py-20 text-center relative z-10">
+    <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to Take Control?</h2>
+    <p class="text-lg text-blue-100 mb-10 max-w-2xl mx-auto">Join Healthcare Select and get a partner who rides shotgun on your entire health journey. Connect your Medicare data, access your complete care ecosystem, and start making better decisions today.</p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a href="/auth/demo" class="bg-white text-blue-900 px-8 py-4 rounded-xl text-lg font-semibold hover:bg-gray-100 transition shadow-lg">Try the Demo</a>
+      <a href="/auth/login" class="bg-red-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-red-700 cta-glow transition">Connect Your Medicare</a>
+    </div>
+  </div>
+</section>
