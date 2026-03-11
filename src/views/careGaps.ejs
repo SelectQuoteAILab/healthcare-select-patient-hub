@@ -1,0 +1,48 @@
+<div class="page-header">
+  <h1><i class="fas fa-exclamation-triangle"></i> Care Gaps</h1>
+  <p>Preventive care and monitoring recommendations based on your health data</p>
+</div>
+
+<% if (typeof gaps !== 'undefined' && gaps.length > 0) { %>
+  <div class="gap-filters">
+    <button class="filter-btn active" data-filter="all">All (<%= gaps.length %>)</button>
+    <button class="filter-btn" data-filter="open">Open (<%= gaps.filter(g => g.status === 'open').length %>)</button>
+    <button class="filter-btn" data-filter="resolved">Resolved (<%= gaps.filter(g => g.status === 'resolved').length %>)</button>
+  </div>
+
+  <div class="gap-grid">
+    <% gaps.forEach(gap => { %>
+      <div class="gap-card gap-<%= gap.status %>" data-status="<%= gap.status %>">
+        <div class="gap-header">
+          <span class="gap-status-badge <%= gap.status %>"><%= gap.status %></span>
+          <span class="gap-priority <%= gap.priority || 'medium' %>"><%= gap.priority || 'medium' %></span>
+        </div>
+        <h3><%= gap.gap_name %></h3>
+        <p class="gap-description"><%= gap.description || '' %></p>
+        <div class="gap-meta">
+          <% if (gap.due_date) { %>
+            <span><i class="fas fa-calendar"></i> Due: <%= new Date(gap.due_date).toLocaleDateString() %></span>
+          <% } %>
+          <% if (gap.source) { %>
+            <span><i class="fas fa-database"></i> Source: <%= gap.source %></span>
+          <% } %>
+        </div>
+        <% if (gap.status === 'open') { %>
+          <div class="gap-actions">
+            <a href="#" class="btn btn-sm btn-primary">Schedule with Virtual Care</a>
+            <form action="/care-gaps/<%= gap.id %>/resolve" method="POST" style="display:inline">
+              <button type="submit" class="btn btn-sm btn-secondary">Mark Resolved</button>
+            </form>
+          </div>
+        <% } %>
+      </div>
+    <% }); %>
+  </div>
+<% } else { %>
+  <div class="empty-state">
+    <i class="fas fa-check-circle"></i>
+    <h2>No Care Gaps</h2>
+    <p>Sync your Medicare data to check for care gaps.</p>
+    <a href="/bluebutton/sync" class="btn btn-primary">Sync Medicare Data</a>
+  </div>
+<% } %>
