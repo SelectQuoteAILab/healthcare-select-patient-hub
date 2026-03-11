@@ -27,3 +27,25 @@ services:
         value: info
       - key: AUDIT_LOG_ENABLED
         value: true
+      # Point the app at the persistent disk mount path.
+      # This must match disk.mountPath below so the SQLite file survives deploys.
+      - key: DATABASE_PATH
+        value: /data/patient_hub.db
+
+    # Persistent disk for SQLite PHI storage.
+    #
+    # IMPORTANT – Render free-tier instances do NOT support persistent disks.
+    # You must be on a paid plan (Starter or above) for this block to apply.
+    #
+    # The disk is mounted at /data. The DATABASE_PATH env var above points here.
+    # Without this block the SQLite file lives on an ephemeral filesystem and
+    # ALL patient data is wiped on every deploy or instance restart.
+    #
+    # Size: start at 1 GB and increase as claims_cache grows. SQLite WAL mode
+    # means reads don't block writes, but this is still a single-file DB –
+    # consider migrating to PostgreSQL (via Render's managed offering) for
+    # production workloads with multiple concurrent users.
+    disk:
+      name: sqlite-phi-data
+      mountPath: /data
+      sizeGB: 1
