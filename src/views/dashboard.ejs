@@ -1,19 +1,98 @@
-<%- include('partials/head') %>
-<%- include('partials/nav') %>
-<main class="flex-1">
+<%- include('partials/header') %>
 <div class="max-w-7xl mx-auto px-4 py-8">
-  <div class="mb-8"><h1 class="text-3xl font-serif font-bold" style="color:#1B3D6E">Welcome Back<%= typeof user !== 'undefined' && user && user.name ? ', ' + user.name : '' %></h1><p class="text-gray-600 mt-1">Your Medicare health overview</p></div>
-  <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-    <div class="bg-white rounded-xl shadow-sm p-6 border-l-4" style="border-left-color:#C8102E"><p class="text-sm text-gray-500">Total Claims</p><p class="text-2xl font-bold" style="color:#1B3D6E"><%= typeof claimsCount !== 'undefined' ? claimsCount : '0' %></p></div>
-    <div class="bg-white rounded-xl shadow-sm p-6 border-l-4" style="border-left-color:#C8102E"><p class="text-sm text-gray-500">Medications</p><p class="text-2xl font-bold" style="color:#1B3D6E"><%= typeof medsCount !== 'undefined' ? medsCount : '0' %></p></div>
-    <div class="bg-white rounded-xl shadow-sm p-6 border-l-4" style="border-left-color:#C8102E"><p class="text-sm text-gray-500">Care Gaps</p><p class="text-2xl font-bold" style="color:#C8102E"><%= typeof careGapsCount !== 'undefined' ? careGapsCount : '0' %></p></div>
-    <div class="bg-white rounded-xl shadow-sm p-6 border-l-4" style="border-left-color:#C8102E"><p class="text-sm text-gray-500">Last Updated</p><p class="text-2xl font-bold" style="color:#1B3D6E"><%= typeof lastSync !== 'undefined' ? lastSync : 'N/A' %></p></div>
+  <div class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl font-bold brand-navy">Health Dashboard</h1>
+    <% if (typeof isDemoUser !== 'undefined' && isDemoUser) { %>
+      <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">Demo Mode</span>
+    <% } %>
   </div>
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <a href="/claims" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition"><div class="flex items-center space-x-3 mb-3"><svg class="w-8 h-8" style="color:#1B3D6E" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg><h3 class="text-lg font-serif font-bold" style="color:#1B3D6E">View Claims</h3></div><p class="text-gray-600 text-sm">Review your Medicare claims and EOBs</p></a>
-    <a href="/medications" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition"><div class="flex items-center space-x-3 mb-3"><svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg><h3 class="text-lg font-serif font-bold" style="color:#1B3D6E">Medications</h3></div><p class="text-gray-600 text-sm">Track prescriptions and Part D coverage</p></a>
-    <a href="/care-gaps" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition"><div class="flex items-center space-x-3 mb-3"><svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><h3 class="text-lg font-serif font-bold" style="color:#1B3D6E">Care Gaps</h3></div><p class="text-gray-600 text-sm">View preventive care recommendations</p></a>
+
+  <% if (patient) { %>
+  <div class="grid md:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white rounded-xl p-6 shadow-sm border-l-4 border-blue-600">
+      <p class="text-sm text-gray-500">Patient</p>
+      <p class="text-lg font-bold brand-navy"><%= patient.name %></p>
+      <p class="text-sm text-gray-400"><%= patient.address ? patient.address.city + ', ' + patient.address.state : '' %></p>
+    </div>
+    <div class="bg-white rounded-xl p-6 shadow-sm border-l-4 border-green-500">
+      <p class="text-sm text-gray-500">Coverage</p>
+      <p class="text-lg font-bold"><%= coverage ? coverage.planName : 'N/A' %></p>
+      <p class="text-sm text-green-600"><%= coverage ? coverage.status : '' %></p>
+    </div>
+    <div class="bg-white rounded-xl p-6 shadow-sm border-l-4 border-orange-500">
+      <p class="text-sm text-gray-500">Active Medications</p>
+      <p class="text-3xl font-bold"><%= medications.length %></p>
+    </div>
+    <div class="bg-white rounded-xl p-6 shadow-sm border-l-4 border-red-500">
+      <p class="text-sm text-gray-500">Care Gaps</p>
+      <p class="text-3xl font-bold"><%= careGaps.filter(g => g.status !== 'completed').length %></p>
+      <p class="text-sm text-red-600">need attention</p>
+    </div>
   </div>
+
+  <div class="grid md:grid-cols-2 gap-8">
+    <div class="bg-white rounded-xl p-6 shadow-sm">
+      <h2 class="text-xl font-bold brand-navy mb-4">Medications</h2>
+      <% medications.slice(0,3).forEach(med => { %>
+        <div class="flex justify-between items-center py-3 border-b last:border-0">
+          <div>
+            <p class="font-medium"><%= med.name %></p>
+            <p class="text-sm text-gray-500"><%= med.prescriber %></p>
+          </div>
+          <div class="text-right">
+            <span class="<%= med.adherence >= 90 ? 'text-green-600' : med.adherence >= 80 ? 'text-yellow-600' : 'text-red-600' %> font-bold"><%= med.adherence %>%</span>
+            <p class="text-xs text-gray-400">adherence</p>
+          </div>
+        </div>
+      <% }) %>
+      <a href="/dashboard/medications" class="block text-center mt-4 text-blue-600 hover:underline">View all medications &rarr;</a>
+    </div>
+
+    <div class="bg-white rounded-xl p-6 shadow-sm">
+      <h2 class="text-xl font-bold brand-navy mb-4">Care Gaps</h2>
+      <% careGaps.filter(g => g.status !== 'completed').slice(0,3).forEach(gap => { %>
+        <div class="flex justify-between items-center py-3 border-b last:border-0">
+          <div>
+            <p class="font-medium"><%= gap.name %></p>
+            <p class="text-sm text-gray-500"><%= gap.description %></p>
+          </div>
+          <span class="<%= gap.status === 'overdue' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800' %> px-2 py-1 rounded-full text-xs font-medium"><%= gap.status %></span>
+        </div>
+      <% }) %>
+      <a href="/dashboard/care-gaps" class="block text-center mt-4 text-blue-600 hover:underline">View all care gaps &rarr;</a>
+    </div>
+  </div>
+
+  <% if (spending) { %>
+  <div class="mt-8 bg-white rounded-xl p-6 shadow-sm">
+    <h2 class="text-xl font-bold brand-navy mb-4">Spending Summary</h2>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div>
+        <p class="text-sm text-gray-500">YTD Spending</p>
+        <p class="text-2xl font-bold">$<%= spending.ytd.toLocaleString() %></p>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Deductible</p>
+        <p class="text-2xl font-bold">$<%= spending.deductible %> / $<%= spending.deductibleMax %></p>
+        <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
+          <div class="bg-blue-600 h-2 rounded-full" style="width: <%= Math.min(100, (spending.deductible/spending.deductibleMax)*100) %>%"></div>
+        </div>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Out-of-Pocket</p>
+        <p class="text-2xl font-bold">$<%= spending.outOfPocket %> / $<%= spending.outOfPocketMax.toLocaleString() %></p>
+        <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
+          <div class="bg-green-600 h-2 rounded-full" style="width: <%= Math.min(100, (spending.outOfPocket/spending.outOfPocketMax)*100) %>%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% } %>
+  <% } else { %>
+  <div class="text-center py-20">
+    <p class="text-xl text-gray-500 mb-4">No health data loaded yet.</p>
+    <a href="/auth/login" class="bg-brand-red text-white px-6 py-3 rounded-lg">Connect Blue Button</a>
+  </div>
+  <% } %>
 </div>
-</main>
 <%- include('partials/footer') %>

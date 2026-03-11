@@ -1,206 +1,94 @@
+'use strict';
 require('dotenv').config();
 const express = require('express');
+const path = require('path');
 const session = require('express-session');
 const helmet = require('helmet');
-const cors = require('cors');
-const rateLimit = require('express-rate-limit');
+const compression = require('compression');
 const cookieParser = require('cookie-parser');
-const path = require('path');
-const crypto = require('crypto');
+const rateLimit = require('express-rate-limit');
 const { v4: uuidv4 } = require('uuid');
-const logger = require('./utils/logger');
-const auditLog = require('./middleware/auditLog');
-const { initDatabase } = require('./db/database');
-
-// ── Hard-fail on missing secrets ─────────────────────────────────────────────
-// A random fallback for SESSION_SECRET means every restart invalidates all
-// active sessions AND produces a different CSRF signing secret, breaking
-// in-flight requests. Never acceptable in production.
-if (process.env.NODE_ENV === 'production' && !process.env.SESSION_SECRET) {
-  throw new Error(
-    'FATAL: SESSION_SECRET environment variable is not set. ' +
-    'Generate one with: node -e "console.log(require(\'crypto\').randomBytes(64).toString(\'hex\'))"'
-  );
-}
+const winston = require('winston');
 
 const app = express();
+app.set('trust proxy', 1);
 const PORT = process.env.PORT || 3000;
 
-// ── Nonce middleware (must run BEFORE helmet so res.locals.cspNonce is set) ──
-// A per-request nonce replaces 'unsafe-inline' for script-src. Each HTML
-// response includes <script nonce="..."> tags. Any injected inline script
-// without the matching nonce is blocked by the browser.
+// Logger
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.combine(winston.format.timestamp(), winston.format.json()),
+  transports: [new winston.transports.Console()]
+});
+
+// Security
 app.use((req, res, next) => {
-  res.locals.cspNonce = crypto.randomBytes(16).toString('base64');
+  res.locals.cspNonce = uuidv4();
   next();
 });
 
-// ── HIPAA-compliant security headers ─────────────────────────────────────────
-app.use((req, res, next) => {
-  helmet({
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: ["'self'"],
-        // 'unsafe-inline' REMOVED – use per-request nonce instead.
-        // In EJS views, render inline scripts as:
-        //   <script nonce="<%= cspNonce %>"> ... </script>
-        scriptSrc: [
-          "'self'",
-          (req, res) => `'nonce-${res.locals.cspNonce}'`,
-          'https://cdn.jsdelivr.net'
-        ],
-        styleSrc: [
-          "'self'",
-          // Inline styles are still allowed; tighten further by moving all
-          // inline styles to external stylesheets if compliance requires it.
-          "'unsafe-inline'",
-          'https://cdn.jsdelivr.net',
-          'https://fonts.googleapis.com'
-        ],
-        fontSrc: ["'self'", 'https://fonts.gstatic.com', 'https://cdn.jsdelivr.net'],
-        imgSrc: ["'self'", 'data:', 'https:'],
-        connectSrc: [
-          "'self'",
-          'https://sandbox.bluebutton.cms.gov',
-          'https://api.bluebutton.cms.gov'
-        ],
-        // Explicitly block object/embed/frame to reduce attack surface on PHI views.
-        objectSrc: ["'none'"],
-        frameAncestors: ["'none'"]
-      }
-    },
-    hsts: { maxAge: 31536000, includeSubDomains: true, preload: true }
-  })(req, res, next);
-});
-
-app.use(cors({ origin: process.env.APP_URL || 'http://localhost:3000', credentials: true }));
-
-// ── Rate limiting ─────────────────────────────────────────────────────────────
-// Global limiter: 100 req / 15 min
-const globalLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: 'Too many requests, please try again later.'
-});
-app.use(globalLimiter);
-
-// Strict limiter for all /auth/* routes: 10 req / 15 min
-// This covers the OAuth initiation, callback, and consent endpoints.
-// Prevents enumeration of Medicare beneficiary IDs and token-exchange abuse.
-const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 10,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: 'Too many authentication attempts, please try again later.',
-  // Skip rate limit on successful responses so legitimate retries after
-  // genuine errors don't exhaust the window prematurely.
-  skipSuccessfulRequests: false
-});
-app.use('/auth', authLimiter);
-
-app.use(express.json({ limit: '1mb' }));
-app.use(express.urlencoded({ extended: true }));
-
-// cookie-parser is required by csrf-csrf for its cookie-based double-submit pattern
-app.use(cookieParser());
-
-app.use(express.static(path.join(__dirname, '../public')));
-
-// ── Session ───────────────────────────────────────────────────────────────────
-app.use(session({
-  secret: process.env.SESSION_SECRET || uuidv4(), // uuidv4 fallback is dev-only (hard-fails in prod above)
-  resave: false,
-  saveUninitialized: false,
-  name: '__hsph_sid',
-  cookie: {
-    secure: process.env.NODE_ENV === 'production',
-    httpOnly: true,
-    maxAge: 30 * 60 * 1000, // 30-minute HIPAA session timeout
-    sameSite: 'lax'
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "https://cdn.tailwindcss.com", (req, res) => `'nonce-${res.locals.cspNonce}'`],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.tailwindcss.com"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com"],
+      imgSrc: ["'self'", "data:", "https:"],
+      connectSrc: ["'self'"]
+    }
   }
 }));
 
-// ── CSRF protection (csrf-csrf double-submit cookie pattern) ──────────────────
-// Must be registered AFTER cookieParser and session.
-// Protects all state-mutating routes (POST /auth/consent, etc.).
-// GET / HEAD / OPTIONS are ignored automatically by csrf-csrf.
-const { doubleCsrf } = require('csrf-csrf');
-const { generateToken, doubleCsrfProtection } = doubleCsrf({
-  // Signing secret – reuse SESSION_SECRET so key material stays in one place.
-  getSecret: () => process.env.SESSION_SECRET || 'dev-csrf-secret-change-me',
-  cookieName: process.env.NODE_ENV === 'production' ? '__Host-csrf' : '_csrf',
-  cookieOptions: {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    path: '/'
-  },
-  size: 64,
-  ignoredMethods: ['GET', 'HEAD', 'OPTIONS']
-});
+app.use(compression());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, '..', 'public')));
 
-// Expose generateToken on res.locals so routes can pass it to views.
-app.use((req, res, next) => {
-  res.locals.generateCsrfToken = () => generateToken(req, res);
-  next();
-});
+// Session
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'dev-secret-change-me',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: process.env.NODE_ENV === 'production', httpOnly: true, maxAge: 24*60*60*1000 }
+}));
 
-// Apply CSRF protection globally; individual routes that need the token will
-// call res.locals.generateCsrfToken() when rendering forms.
-app.use(doubleCsrfProtection);
+// Rate limiting
+app.use(rateLimit({ windowMs: 15*60*1000, max: 100 }));
 
-// ── View engine ───────────────────────────────────────────────────────────────
+// View engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// ── Audit logging ─────────────────────────────────────────────────────────────
-app.use(auditLog);
+// Global template vars
+app.use((req, res, next) => {
+  res.locals.user = req.session.user || null;
+  res.locals.bbData = req.session.bbData || null;
+  res.locals.isDemoUser = !!req.session.isDemoUser;
+  next();
+});
 
-// ── Routes ────────────────────────────────────────────────────────────────────
+// Routes
 app.use('/', require('./routes/index'));
 app.use('/auth', require('./routes/auth'));
 app.use('/dashboard', require('./routes/dashboard'));
+app.use('/dashboard/medications', require('./routes/medications'));
+app.use('/dashboard/care-gaps', require('./routes/careGaps'));
+app.use('/dashboard/plan-insights', require('./routes/insights'));
+app.use('/dashboard/assessment', require('./routes/survey'));
+app.use('/dashboard/care-team', require('./routes/claims'));
 app.use('/api/bluebutton', require('./routes/bluebutton'));
-app.use('/api/medications', require('./routes/medications'));
-app.use('/api/claims', require('./routes/claims'));
-app.use('/api/care-gaps', require('./routes/careGaps'));
-app.use('/api/survey', require('./routes/survey'));
-app.use('/api/insights', require('./routes/insights'));
-
-// ── Error handlers ────────────────────────────────────────────────────────────
-// CSRF token mismatch
-app.use((err, req, res, next) => {
-  if (err.code === 'CSRF_INVALID' || err.message === 'invalid csrf token') {
-    logger.warn('CSRF validation failed', { path: req.path, ip: req.ip });
-    return res.status(403).render('error', { message: 'Invalid or expired form token. Please refresh and try again.', error: {} });
-  }
-  next(err);
-});
-
-// Generic error handler – never expose stack traces to the client in production.
-app.use((err, req, res, next) => {
-  logger.error('Unhandled error', { error: err.message, stack: err.stack, path: req.path });
-  res.status(500).render('error', {
-    message: 'An unexpected error occurred',
-    error: process.env.NODE_ENV === 'development' ? err : {}
-  });
-});
 
 // 404
 app.use((req, res) => {
-  res.status(404).render('error', { message: 'Page not found', error: {} });
+  res.status(404).render('error', { title: '404', statusCode: 404, message: 'Page not found' });
 });
 
-// ── Bootstrap ─────────────────────────────────────────────────────────────────
-initDatabase().then(() => {
-  app.listen(PORT, () => {
-    logger.info(`Healthcare Select Patient Hub running on port ${PORT}`);
-    logger.info(`Environment: ${process.env.NODE_ENV || 'development'}`);
-  });
-}).catch(err => {
-  logger.error('Failed to initialize database', { error: err.message });
-  process.exit(1);
+// Error handler
+app.use((err, req, res, next) => {
+  logger.error(err.stack);
+  res.status(500).render('error', { title: 'Error', statusCode: 500, message: 'Something went wrong' });
 });
+
+app.listen(PORT, () => logger.info(`Server running on port ${PORT}`));

@@ -1,31 +1,61 @@
-<%- include('partials/head') %>
-<%- include('partials/nav') %>
-<main class="flex-1">
-<section style="background:linear-gradient(135deg,#1B3D6E 0%,#2a5298 100%)" class="py-20 px-4">
-  <div class="max-w-4xl mx-auto text-center">
-    <h1 class="text-4xl md:text-5xl font-serif font-bold text-white mb-6">Your Medicare Health Dashboard</h1>
-    <p class="text-xl text-gray-200 mb-8 max-w-2xl mx-auto">Securely access your Medicare claims, medications, and care gaps through Blue Button 2.0</p>
-    <a href="/auth/login" class="inline-block text-white px-8 py-4 rounded-lg text-lg font-semibold shadow-lg hover:opacity-90 transition" style="background:#C8102E">Connect Your Medicare Account</a>
-  </div>
-</section>
-<section class="max-w-7xl mx-auto px-4 py-16">
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 text-center hover:shadow-md transition">
-      <div class="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center mx-auto mb-4"><svg class="w-6 h-6" style="color:#1B3D6E" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div>
-      <h3 class="text-lg font-serif font-bold mb-2" style="color:#1B3D6E">Claims History</h3>
-      <p class="text-gray-600 text-sm">View all your Medicare claims and explanations of benefits in one place.</p>
-    </div>
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 text-center hover:shadow-md transition">
-      <div class="w-12 h-12 bg-green-50 rounded-lg flex items-center justify-center mx-auto mb-4"><svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg></div>
-      <h3 class="text-lg font-serif font-bold mb-2" style="color:#1B3D6E">Medications</h3>
-      <p class="text-gray-600 text-sm">Track your prescriptions and Part D coverage details.</p>
-    </div>
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 text-center hover:shadow-md transition">
-      <div class="w-12 h-12 bg-red-50 rounded-lg flex items-center justify-center mx-auto mb-4"><svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg></div>
-      <h3 class="text-lg font-serif font-bold mb-2" style="color:#1B3D6E">Care Gaps</h3>
-      <p class="text-gray-600 text-sm">Identify preventive care opportunities and recommended screenings.</p>
+<%- include('partials/header') %>
+
+<div class="bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 text-white">
+  <div class="max-w-7xl mx-auto px-4 py-20 sm:py-32">
+    <div class="text-center">
+      <h1 class="text-4xl sm:text-6xl font-bold mb-6">Your Health Command Center</h1>
+      <p class="text-xl sm:text-2xl text-blue-200 mb-10 max-w-3xl mx-auto">Connect your Medicare Blue Button data to get personalized insights, manage medications, close care gaps, and take control of your healthcare journey.</p>
+      <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <a href="/auth/demo" class="bg-white text-blue-900 px-8 py-4 rounded-xl text-lg font-bold hover:bg-gray-100 transition shadow-lg">Try Demo</a>
+        <a href="/auth/login" class="bg-brand-red px-8 py-4 rounded-xl text-lg font-bold hover:opacity-90 transition shadow-lg">Connect Medicare Data</a>
+      </div>
     </div>
   </div>
-</section>
-</main>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 py-16">
+  <h2 class="text-3xl font-bold text-center brand-navy mb-12">Powered by Blue Button 2.0</h2>
+  <div class="grid md:grid-cols-3 gap-8">
+    <div class="bg-white rounded-xl p-8 shadow-md text-center">
+      <div class="text-4xl mb-4">&#x1F48A;</div>
+      <h3 class="text-xl font-bold brand-navy mb-3">Medication Management</h3>
+      <p class="text-gray-600">Track medications, adherence scores, and get refill reminders powered by your claims data.</p>
+    </div>
+    <div class="bg-white rounded-xl p-8 shadow-md text-center">
+      <div class="text-4xl mb-4">&#x1F3AF;</div>
+      <h3 class="text-xl font-bold brand-navy mb-3">Care Gap Detection</h3>
+      <p class="text-gray-600">AI-powered analysis identifies missed screenings and preventive care opportunities.</p>
+    </div>
+    <div class="bg-white rounded-xl p-8 shadow-md text-center">
+      <div class="text-4xl mb-4">&#x1F4CA;</div>
+      <h3 class="text-xl font-bold brand-navy mb-3">Plan Insights</h3>
+      <p class="text-gray-600">Understand your spending, deductibles, and out-of-pocket costs in real time.</p>
+    </div>
+  </div>
+</div>
+
+<div class="bg-white py-16">
+  <div class="max-w-7xl mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center brand-navy mb-12">Your Complete Health Ecosystem</h2>
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="border-2 border-blue-100 rounded-xl p-6">
+        <h3 class="font-bold brand-navy mb-2">SelectRx Pharmacy</h3>
+        <p class="text-sm text-gray-600">50-state licensed pharmacy with home delivery and medication therapy management.</p>
+      </div>
+      <div class="border-2 border-blue-100 rounded-xl p-6">
+        <h3 class="font-bold brand-navy mb-2">Virtual Care</h3>
+        <p class="text-sm text-gray-600">50-state licensed virtual care practice for convenient telehealth visits.</p>
+      </div>
+      <div class="border-2 border-blue-100 rounded-xl p-6">
+        <h3 class="font-bold brand-navy mb-2">CCM & RPM</h3>
+        <p class="text-sm text-gray-600">Chronic Care Management with Remote Patient Monitoring for ongoing support.</p>
+      </div>
+      <div class="border-2 border-blue-100 rounded-xl p-6">
+        <h3 class="font-bold brand-navy mb-2">Healthcare Select</h3>
+        <p class="text-sm text-gray-600">First-party health and lifestyle surveys powering personalized recommendations.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <%- include('partials/footer') %>

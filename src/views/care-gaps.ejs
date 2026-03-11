@@ -1,0 +1,19 @@
+<%- include('partials/header') %>
+<div class="max-w-7xl mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold brand-navy mb-8">Care Gaps</h1>
+  <div class="grid gap-4">
+    <% careGaps.forEach(gap => { %>
+    <div class="bg-white rounded-xl p-6 shadow-sm border-l-4 <%= gap.status === 'overdue' ? 'border-red-500' : gap.status === 'completed' ? 'border-green-500' : 'border-yellow-500' %>">
+      <div class="flex justify-between items-start">
+        <div>
+          <h3 class="text-lg font-bold"><%= gap.name %></h3>
+          <p class="text-gray-500"><%= gap.description %></p>
+          <p class="text-sm text-gray-400 mt-1">Due: <%= gap.dueDate %></p>
+        </div>
+        <span class="<%= gap.status === 'overdue' ? 'bg-red-100 text-red-800' : gap.status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' %> px-3 py-1 rounded-full text-sm font-medium"><%= gap.status %></span>
+      </div>
+    </div>
+    <% }) %>
+  </div>
+</div>
+<%- include('partials/footer') %>
