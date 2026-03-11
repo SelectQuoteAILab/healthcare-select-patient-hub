@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title !== 'undefined' ? title : 'Healthcare Select Patient Hub' %></title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand">
+      <i class="fas fa-heartbeat"></i>
+      <span>Healthcare Select Patient Hub</span>
+    </div>
+    <div class="nav-links">
+      <% if (typeof user !== 'undefined' && user) { %>
+        <a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="/medications"><i class="fas fa-pills"></i> Medications</a>
+        <a href="/claims"><i class="fas fa-file-medical"></i> Claims</a>
+        <a href="/care-gaps"><i class="fas fa-exclamation-triangle"></i> Care Gaps</a>
+        <a href="/survey"><i class="fas fa-clipboard-list"></i> Health Survey</a>
+        <a href="/auth/logout" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      <% } else { %>
+        <a href="/auth/login" class="btn-login"><i class="fas fa-sign-in-alt"></i> Connect with Medicare</a>
+      <% } %>
+    </div>
+    <button class="nav-toggle" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+  </nav>
+  <% if (typeof flash !== 'undefined' && flash) { %>
+    <div class="alert alert-<%= flash.type %>">
+      <i class="fas fa-<%= flash.type === 'success' ? 'check-circle' : 'exclamation-circle' %>"></i>
+      <%= flash.message %>
+    </div>
+  <% } %>
+  <main class="container">
+    <%- body %>
+  </main>
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>Healthcare Select Patient Hub</h4>
+        <p>Powered by CMS Blue Button 2.0</p>
+        <p>Your data. Your health. Your decisions.</p>
+      </div>
+      <div class="footer-section">
+        <h4>Our Services</h4>
+        <p>Healthcare Services Virtual Care</p>
+        <p>SelectRx Pharmacy</p>
+        <p>Chronic Care Management</p>
+        <p>Healthcare Select Surveys</p>
+      </div>
+      <div class="footer-section">
+        <h4>Compliance</h4>
+        <p>HIPAA Compliant</p>
+        <p>CMS Blue Button 2.0 Certified</p>
+        <p>AES-256 Encryption</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; <%= new Date().getFullYear() %> SelectQuote Healthcare. All rights reserved.</p>
+    </div>
+  </footer>
+  <script src="/js/app.js"></script>
+</body>
+</html>
